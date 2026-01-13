@@ -30,7 +30,8 @@ namespace NerdStore.Vendas.Data.Repository
         }
         public async Task<Pedido> ObterPedidoRascunhoPorClienteId(Guid clienteId)
         {
-            var pedido = await _context.Pedidos.FirstOrDefaultAsync(p => p.ClienteId == clienteId && p.PedidoStatus == PedidoStatus.Iniciado);
+            //var pedido = await _context.Pedidos.FirstOrDefaultAsync(p => p.ClienteId == clienteId && p.PedidoStatus == PedidoStatus.Iniciado);
+            var pedido = await _context.Pedidos.FirstOrDefaultAsync(p => p.ClienteId == clienteId);
             if (pedido == null)
             {
                 return null;

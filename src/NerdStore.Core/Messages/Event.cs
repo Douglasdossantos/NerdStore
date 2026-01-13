@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NerdStore.Core.Messages
 {
-    public abstract class Event :Message, INotification
+    public abstract class Event : Message, INotification
     {
         protected Event()
         {
