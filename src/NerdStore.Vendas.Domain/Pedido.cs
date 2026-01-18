@@ -1,4 +1,5 @@
-﻿using NerdStore.Core.DomainObjects;
+﻿using FluentValidation.Results;
+using NerdStore.Core.DomainObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,11 +46,20 @@ namespace NerdStore.Vendas.Domain
             CalcularValorTotalDesconto();
         }
 
-        public void AplicarVoucher(Voucher voucher)
+        public ValidationResult AplicarVoucher(Voucher voucher)
         {
-            voucher = voucher;
+            var validateResult = voucher.ValidarSeAplicavel();
+
+            if (!validateResult.IsValid)
+            {
+                return validateResult;
+            }
+
+            Voucher = voucher;
             VoucherUtilizado = true;
             CalcularValorPedido();
+
+            return validateResult;
         }
 
         public void CalcularValorTotalDesconto()
@@ -60,6 +70,7 @@ namespace NerdStore.Vendas.Domain
             }
             decimal desconto = 0;
             var valor = ValorTotal;
+
             if (Voucher.TipoDescontoVoucher == TipoDescontoVoucher.Porcentagem)
             {
                 if (Voucher.Percentual.HasValue)
@@ -155,7 +166,7 @@ namespace NerdStore.Vendas.Domain
         public void AtualizarUnidades(PedidoItem item, int unidades)
         {
             item.AtualizarUnidades(unidades);
-            AtualizarUnidades(item,unidades);
+            AtualizarItem(item);
         }
         public void TornarRascunho()
         {
